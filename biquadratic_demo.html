@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Biquadratic Factorisation</title>
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <style media="screen">
+      body {
+        font-size: 24px;
+      }
+      .Step {
+        max-width: 800px;
+        border: 1px #f1c40f solid;
+        border-radius: 25px;
+        padding: 20px;
+        margin-top: 20px;
+      }
+      .help {
+        padding: 11px 25px;
+        display: inline-block;
+        float: right;
+        cursor: pointer;
+        font-size: 18px;
+        outline: 0;
+        background: transparent;
+        border-radius: 4px;
+        border: 1px solid #999;
+        color: #999;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
+        -ms-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        text-align: center;
+        transition: background-color 0.5s;
+      }
+      .help:hover {
+        background: #bbb !important;
+        color: #fff;
+      }
+      .Working {
+        height: 0;
+        overflow: hidden;
+        transition: height 0.5s;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="Question">
+      Factorise \(\displaystyle 25x^4 + 46x^2y^2 + 25y^4\)
+    </div>
+    <div class="Answer">
+      <div class="Step">
+        Complete the square:
+
+        <button type="button" name="help" class="help" id="help1">?</button>
+
+        <div class="Working" id="working1">
+            \[ \begin{align}
+               & 25x^4 + 25y^4 + 46x^2y^2 \\
+               & \left(5x^2\right)^2 + \left(5y^2\right)^2 + 46x^2y^2
+            \end{align} \]
+        </div>
+
+        \[\left(5x^2 + 5y^2\right)^2 − 2\left(5x^2\right)\left(5y^2\right) + 46x^2y^2\]
+      </div>
+      <div class="Step">
+        Write as the difference of two squares:
+
+        <button type="button" name="help" class="help" id="help2">?</button>
+
+        <div class="Working" id="working2">
+          \[ \begin{align}
+             & \left(5x^2 + 5y^2\right)^2 - 50x^2y^2 + 46x^2y^2 \\
+             & \left(5x^2 + 5y^2\right)^2 - 4x^2y^2
+          \end{align} \]
+        </div>
+
+         \[ \left(5x^2 + 5y^2\right)^2 - \left(2xy\right)^2 \]
+
+      </div>
+      <div class="Step">
+        Factorise and rearrange:
+
+        <button type="button" name="help" class="help" id="help3">?</button>
+
+        <div class="Working" id="working3">
+          \[ \begin{align}
+             & \left( \left(5x^2 + 5y^2\right) - 2xy \right)\left( \left(5x^2 + 5y^2\right) + 2xy \right) \\
+             & \left( 5x^2 + 5y^2 - 2xy \right)\left( 5x^2 + 5y^2 + 2xy \right)
+          \end{align} \]
+        </div>
+
+         \[ \left( 5x^2 - 2xy + 5y^2 \right)\left( 5x^2 + 2xy + 5y^2 \right) \]
+      </div>
+    </div>
+    <script type="text/javascript">
+
+    initButton("help1", "working1", 120);
+    initButton("help2", "working2", 128);
+    initButton("help3", "working3", 118);
+
+    function initButton(buttonID, workingID, height) {
+      var button = document.getElementById(buttonID);
+      var working = document.getElementById(workingID);
+      button.addEventListener("mousedown", function() {
+        if (button.innerHTML === "?") {
+          button.innerHTML = "&minus;";
+          working.style.height = height + "px";
+        } else {
+          button.innerHTML = "?";
+          button.style.background = "transparent";
+          working.style.height = "0";
+        }
+      });
+    }
+    </script>
+  </body>
+</html>
