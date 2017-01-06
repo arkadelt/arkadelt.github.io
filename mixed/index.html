@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Mixed Numbers</title>
+    <link rel="stylesheet" href="mathquill.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="mathquill.js"></script>
+    <style media="screen">
+      body {
+        font-family: sans-serif;
+        font-size: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Expression: <span id="expression"></span></p>
+    <p>Message: <span id="message"></span></p>
+
+    <button type="button" name="button" id="button">Parse</button>
+
+    <script>
+    var expressionSpan = document.getElementById('expression');
+    var button = document.getElementById('button');
+
+    var MQ = MathQuill.getInterface(2); // for backcompat
+    var expression = MQ.MathField(expressionSpan, {
+      spaceBehavesLikeTab: false
+    });
+
+    button.addEventListener("click", function() {
+      var latex = expression.latex();
+      var noWhitespace = latex.replace(/\\\s/g, "");
+      var parsed = noWhitespace.match(/(\-)?(\d*)(?:\\frac\{(\d*)\}\{(\d*)\})?/);
+
+      expression.latex(noWhitespace);
+
+      document.getElementById("message").textContent = buildMessage(noWhitespace, parsed);
+
+      function buildMessage(latex, parsed) {
+        var whole, numerator, denominator, factor;
+        var sign = parsed[1] ? parsed[1] : "";
+        if (parsed[0] !== latex) {
+          return "The expression is not in the form of a mixed number.";
+        }
+        if (!parsed[2]) {
+          if (parsed[3] && parsed[4]) {
+            whole = 0;
+            numerator = Number(parsed[3]);
+            denominator = Number(parsed[4]);
+          } else {
+            return "The expression is not in the form of a mixed number.";
+          }
+        } else if (sign + parsed[2] === latex) {
+            return "This is a mixed number equal to " + sign + parsed[2] + ".";
+        } else {
+          whole = Number(parsed[2]);
+          numerator = Number(parsed[3]);
+          denominator = Number(parsed[4]);
+        } if (denominator === 0) {
+          return "You divided by zero. YOU DOOMED US ALL."
+        } if (numerator === 0) {
+          return "I think you mean " + sign + whole + ".";
+        }
+
+        factor = hcf(numerator, denominator);
+
+        if (numerator >= denominator) {
+          while (numerator >= denominator) {
+            numerator -= denominator;
+            whole++;
+          }
+          if (numerator === 0) {
+            return "The numerator of the fractional part should be less than its denominator, I think you mean " + sign +
+            whole + ".";
+          } else if (factor === 1) {
+            return "The numerator of the fractional part should be less than its denominator, I think you mean " + sign +
+            whole + " " + numerator + "/" + denominator + ", which is equal to " + sign +
+            (whole*denominator + numerator).toString() + "/" + denominator + ".";
+          } else {
+            numerator /= factor;
+            denominator /= factor;
+            return "The numerator of the fractional part should be less than its denominator and the fraction should be in simplest form, I think you mean " + sign +
+            whole + " " + numerator + "/" + denominator + ", which is equal to " + sign +
+            (whole*denominator + numerator).toString() + "/" + denominator + ".";
+          }
+        } else {
+          if (factor === 1) {
+            return "This is a mixed number equal to " + sign + (whole*denominator + numerator).toString() + "/" + denominator + ".";
+          } else {
+            numerator /= factor;
+            denominator /= factor;
+            return "The fractional part should be in simplest form, I think you mean " + sign +
+            whole + " " + numerator + "/" + denominator + ", which is equal to " + sign +
+            (whole*denominator + numerator).toString() + "/" + denominator + ".";
+          }
+        }
+      }
+
+      function hcf(x, y) {
+        while (Math.max(x, y) % Math.min(x, y) != 0) {
+          if (x > y) {
+            x %= y;
+          } else {
+            y %= x;
+          }
+        }
+        return Math.min(x, y);
+      }
+    });
+
+    </script>
+  </body>
+</html>
