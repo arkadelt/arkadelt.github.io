@@ -3,7 +3,8 @@
 <body>
 	<p>Input the points in the format '[x1, y1], [x2, y2], ...'</p>
 	<p><label><input type="checkbox" id="quadToggle" value="" checked>Show quadratic spline</label>
-		<label><input type="checkbox" id="cubeToggle" value="" checked>Show cubic spline</label></p>
+		<label><input type="checkbox" id="cubeToggle" value="" checked>Show cubic spline</label>
+		<label><input type="checkbox" id="controlPointToggle" value="">Show control points of cubic spline</label></p>
 	<textarea name="name" rows="8" cols="54" id = "input">[100, 100], [100, 200], [200, 200], [200, 100]</textarea>
 	<button type="button" name="button" id = "button">Update!</button>
 	<div>
@@ -46,6 +47,17 @@
 var clickablePoints = [];
 var clickable = document.getElementById('clickable');
 var clear = document.getElementById('clear');
+
+document.getElementById('controlPointToggle').addEventListener('change', function() {
+	renderSvg(clickablePoints, clickable);
+	try {
+		pointsArray = JSON.parse("[" + document.getElementById("input").value + "]");
+	} catch (e) {
+		alert("Points should be in the format '[x1, y1], [x2, y2], ...'")
+		return;
+	}
+	var answer = renderSvg(pointsArray, document.getElementById('svg'));
+});
 
 document.getElementById('quadToggle').addEventListener('change', function() {
 	renderSvg(clickablePoints, clickable);
@@ -203,6 +215,26 @@ function renderSvg(pointsArray, svg) {
 			printBlueD += "C " + Math.round(conX.p1[i]) + " " + Math.round(conY.p1[i]) + " ";
 			printBlueD += Math.round(conX.p2[i]) + " " + Math.round(conY.p2[i]) + " ";
 			printBlueD += Math.round(x[i+1]) + " " + Math.round(y[i+1]) + " ";
+
+			if (document.getElementById('controlPointToggle').checked) {
+				circle = document.createElementNS(svgNS, 'circle');
+				circle.setAttribute('cx', conX.p1[i]);
+				circle.setAttribute('cy', conY.p1[i]);
+				circle.setAttribute('r', '2');
+				circle.setAttribute('stroke', 'blue');
+				circle.setAttribute('stroke-width', '1');
+				circle.setAttribute('fill', 'white');
+				svg.appendChild(circle);
+
+				circle = document.createElementNS(svgNS, 'circle');
+				circle.setAttribute('cx', conX.p2[i]);
+				circle.setAttribute('cy', conY.p2[i]);
+				circle.setAttribute('r', '2');
+				circle.setAttribute('stroke', 'blue');
+				circle.setAttribute('stroke-width', '1');
+				circle.setAttribute('fill', 'white');
+				svg.appendChild(circle);
+			}
 		}
 		svg.blue.setAttribute('d', blueD);
 		svg.appendChild(svg.blue);
@@ -210,8 +242,8 @@ function renderSvg(pointsArray, svg) {
 
 	for (i = 0; i < n; i++) {
 		circle = document.createElementNS(svgNS, 'circle');
-		circle.setAttribute('cx', pointsArray[i][0]);
-		circle.setAttribute('cy', pointsArray[i][1]);
+		circle.setAttribute('cx', x[i]);
+		circle.setAttribute('cy', y[i]);
 		circle.setAttribute('r', '2');
 		circle.setAttribute('stroke', 'blue');
 		circle.setAttribute('stroke-width', '4');
