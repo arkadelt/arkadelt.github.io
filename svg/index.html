@@ -38,6 +38,8 @@
 		<p>Click on the canvas below to add points. <button type="button" name="button" id = "clear" >Clear points</button></p>
 		<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" id="clickable" style="border: 2px solid black; cursor: pointer;">
 		</svg>
+		<p id = "points"></p>
+		<p id = "controlPoints"></p>
 	</div>
 <script type="text/javascript">
 
@@ -74,13 +76,17 @@ clear.addEventListener('click', function () {
 			clickable.removeChild(clickable.lastChild);
 	}
 	clickablePoints = [];
+	document.getElementById('points').textContent = "";
+	document.getElementById('controlPoints').textContent = "";
 })
 
 clickable.addEventListener('click', function(e) {
-	var x = e.pageX - getOffset(clickable).left;
-	var y = e.pageY - getOffset(clickable).top;
+	var x = Math.round(e.pageX - getOffset(clickable).left);
+	var y = Math.round(e.pageY - getOffset(clickable).top);
 	clickablePoints.push([x, y]);
-	renderSvg(clickablePoints, clickable);
+	var answer = renderSvg(clickablePoints, clickable);
+	document.getElementById('points').textContent = "The points you clicked are: " + JSON.stringify(clickablePoints);
+	document.getElementById('controlPoints').textContent = "The calculated cubic path is: " + answer.blueD;
 });
 
 document.getElementById("button").addEventListener("click", function () {
