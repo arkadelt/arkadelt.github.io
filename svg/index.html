@@ -1,0 +1,231 @@
+﻿<html><head><title>Interactive SVG demo </title>
+</head>
+<body>
+	<p>Input the points in the format '[x1, y1], [x2, y2], ...'</p>
+	<p><label><input type="checkbox" id="quadToggle" value="" checked>Show quadratic spline</label>
+		<label><input type="checkbox" id="cubeToggle" value="" checked>Show cubic spline</label></p>
+	<textarea name="name" rows="8" cols="54" id = "input">[100, 100], [100, 200], [200, 200], [200, 100]</textarea>
+	<button type="button" name="button" id = "button">Update!</button>
+	<div>
+		<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" id="svg" style="border: 2px solid black">
+			<path fill="none" stroke="red" stroke-width="4" d="M 100 100
+																												 Q 100 100 100 150
+																												 Q 100 200 150 200
+																												 Q 200 200 200 150
+																												 Q 200 100 200 100"></path>
+
+			<path fill="none" stroke="#44a7ea" stroke-width="4" d="M 100 100
+																														 C 88.88888888888889 140 77.77777777777779 180 100 200
+																														 C 122.22222222222221 220 177.77777777777777 219.99999999999997 200 200
+																														 C 222.22222222222223 180.00000000000003 211.11111111111111 140 200 100 "></path>
+
+			<circle cx="100" cy="100" r="2" stroke="blue" stroke-width="4" fill="yellow"></circle>
+			<circle cx="100" cy="200" r="2" stroke="blue" stroke-width="4" fill="yellow"></circle>
+			<circle cx="200" cy="200" r="2" stroke="blue" stroke-width="4" fill="yellow"></circle>
+			<circle cx="200" cy="100" r="2" stroke="blue" stroke-width="4" fill="yellow"></circle>
+		</svg>
+		<p id = "quad">The path for the red, quadratic spline above is <span id = "quadPath" style="color: red">M 100 100
+																											 Q 100 100 100 150
+																											 Q 100 200 150 200
+																											 Q 200 200 200 150
+																											 Q 200 100 200 100</span></p>
+		<p id = "cube">The path for the blue, cubic spline above is <span id = "cubePath" style="color: #44a7ea">M 100 100
+																													 C 89 140 78 180 100 200
+																													 C 122 220 178 220 200 200
+																													 C 222 180 211 140 200 100</span></p>
+	</div>
+	<div>
+		<p>Click on the canvas below to add points. <button type="button" name="button" id = "clear" >Clear points</button></p>
+		<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" id="clickable" style="border: 2px solid black; cursor: pointer;">
+		</svg>
+	</div>
+<script type="text/javascript">
+
+var clickablePoints = [];
+var clickable = document.getElementById('clickable');
+var clear = document.getElementById('clear');
+
+document.getElementById('quadToggle').addEventListener('change', function() {
+	renderSvg(clickablePoints, clickable);
+	try {
+		pointsArray = JSON.parse("[" + document.getElementById("input").value + "]");
+	} catch (e) {
+		alert("Points should be in the format '[x1, y1], [x2, y2], ...'")
+		return;
+	}
+	var answer = renderSvg(pointsArray, document.getElementById('svg'));
+	document.getElementById('quad').style.visibility = document.getElementById('quadToggle').checked ? "visible" : "hidden";
+});
+
+document.getElementById('cubeToggle').addEventListener('change', function() {
+	renderSvg(clickablePoints, clickable);
+	try {
+		pointsArray = JSON.parse("[" + document.getElementById("input").value + "]");
+	} catch (e) {
+		alert("Points should be in the format '[x1, y1], [x2, y2], ...'")
+		return;
+	}
+	var answer = renderSvg(pointsArray, document.getElementById('svg'));
+	document.getElementById('cube').style.visibility = document.getElementById('cubeToggle').checked ? "visible" : "hidden";
+});
+
+clear.addEventListener('click', function () {
+	while (clickable.lastChild) {
+			clickable.removeChild(clickable.lastChild);
+	}
+	clickablePoints = [];
+})
+
+clickable.addEventListener('click', function(e) {
+	var x = e.pageX - getOffset(clickable).left;
+	var y = e.pageY - getOffset(clickable).top;
+	clickablePoints.push([x, y]);
+	renderSvg(clickablePoints, clickable);
+});
+
+document.getElementById("button").addEventListener("click", function () {
+		try {
+			pointsArray = JSON.parse("[" + document.getElementById("input").value + "]");
+		} catch (e) {
+			alert("Points should be in the format '[x1, y1], [x2, y2], ...'")
+			return;
+		}
+		var answer = renderSvg(pointsArray, document.getElementById('svg'));
+		document.getElementById('quadPath').textContent = answer.redD;
+		document.getElementById('cubePath').textContent = answer.blueD;
+});
+
+function computeControlPoints(K) {
+    p1 = new Array();
+    p2 = new Array();
+    n = K.length - 1;
+
+    /*rhs vector*/
+    a = new Array();
+    b = new Array();
+    c = new Array();
+    r = new Array();
+
+    /*left most segment*/
+    a[0] = 0;
+    b[0] = 2;
+    c[0] = 1;
+    r[0] = K[0] + 2 * K[1];
+
+    /*internal segments*/
+    for (i = 1; i < n - 1; i++) {
+        a[i] = 1;
+        b[i] = 4;
+        c[i] = 1;
+        r[i] = 4 * K[i] + 2 * K[i + 1];
+    }
+
+    /*right segment*/
+    a[n - 1] = 2;
+    b[n - 1] = 7;
+    c[n - 1] = 0;
+    r[n - 1] = 8 * K[n - 1] + K[n];
+
+    /*solves Ax=b with the Thomas algorithm (from Wikipedia)*/
+    for (i = 1; i < n; i++) {
+        m = a[i] / b[i - 1];
+        b[i] = b[i] - m * c[i - 1];
+        r[i] = r[i] - m * r[i - 1];
+    }
+
+    p1[n - 1] = r[n - 1] / b[n - 1];
+    for (i = n - 2; i >= 0; --i)
+        p1[i] = (r[i] - c[i] * p1[i + 1]) / b[i];
+
+    /*we have p1, now compute p2*/
+    for (i = 0; i < n - 1; i++)
+        p2[i] = 2 * K[i + 1] - p1[i + 1];
+
+    p2[n - 1] = 0.5 * (K[n] + p1[n - 1]);
+
+    return {
+        p1: p1,
+        p2: p2
+    };
+}
+
+function renderSvg(pointsArray, svg) {
+	var circle, yellow, yellowD, blueD = "", printBlueD = "", redD = "", printRedD = "", x, y, i, n, conX, conY;
+	var svgNS = svg.namespaceURI;
+	var n = pointsArray.length;
+
+	while (svg.lastChild) {
+			svg.removeChild(svg.lastChild);
+	}
+
+	x = [];
+	y = [];
+	for (i = 0; i < n; i++) {
+		x.push(pointsArray[i][0]);
+		y.push(pointsArray[i][1]);
+	}
+
+	if (n > 1) {
+		svg.red = document.createElementNS(svgNS, 'path');
+		svg.red.setAttribute('fill', 'none');
+		svg.red.setAttribute('stroke', document.getElementById('quadToggle').checked ? 'red' : 'none');
+		svg.red.setAttribute('stroke-width', '4');
+		redD = "M " + x[0] + " " + y[0] + " ";
+		printRedD = "M " + Math.round(x[0]) + " " + Math.round(y[0]) + " ";
+		for (i = 1; i < n; i++) {
+			redD += "Q " + x[i-1] + " " + y[i-1] + " " + (x[i] + x[i-1])/2 + " " + (y[i] + y[i-1])/2 + " ";
+			printRedD += "Q " + Math.round(x[i-1]) + " " + Math.round(y[i-1]) + " " + Math.round((x[i] + x[i-1])/2)+ " " + Math.round((y[i] + y[i-1])/2) + " ";
+
+		}
+		redD += "Q " + x[n -1] + " " +  y[n - 1] + " " + x[n -1] + " " +  y[n - 1] ;
+		printRedD += "Q " + Math.round(x[n -1]) + " " +  Math.round(y[n - 1]) + " " + Math.round(x[n - 1]) + " " +  Math.round(y[n - 1]) ;
+		svg.red.setAttribute('d', redD);
+		svg.appendChild(svg.red);
+
+		svg.blue = document.createElementNS(svgNS, 'path');
+		svg.blue.setAttribute('fill', 'none');
+		svg.blue.setAttribute('stroke', document.getElementById('cubeToggle').checked ? '#44a7ea' : 'none');
+		svg.blue.setAttribute('stroke-width', '4');
+		blueD = "M " + x[0] + " " +  y[0] + " ";
+		printBlueD = "M " + Math.round(x[0]) + " " +  Math.round(y[0]) + " ";
+		for (i = 0; i < n - 1; i++) {
+			conX = computeControlPoints(x);
+			conY = computeControlPoints(y);
+			blueD += "C " + conX.p1[i] + " " + conY.p1[i] + " ";
+			blueD += conX.p2[i] + " " + conY.p2[i] + " ";
+			blueD += x[i+1] + " " + y[i+1] + " ";
+			printBlueD += "C " + Math.round(conX.p1[i]) + " " + Math.round(conY.p1[i]) + " ";
+			printBlueD += Math.round(conX.p2[i]) + " " + Math.round(conY.p2[i]) + " ";
+			printBlueD += Math.round(x[i+1]) + " " + Math.round(y[i+1]) + " ";
+		}
+		svg.blue.setAttribute('d', blueD);
+		svg.appendChild(svg.blue);
+	}
+
+	for (i = 0; i < n; i++) {
+		circle = document.createElementNS(svgNS, 'circle');
+		circle.setAttribute('cx', pointsArray[i][0]);
+		circle.setAttribute('cy', pointsArray[i][1]);
+		circle.setAttribute('r', '2');
+		circle.setAttribute('stroke', 'blue');
+		circle.setAttribute('stroke-width', '4');
+		circle.setAttribute('fill', 'yellow');
+		svg.appendChild(circle);
+	}
+
+	return { pointsArray: pointsArray,
+					 redD:				printRedD,
+					 blueD:				printBlueD
+				 };
+}
+
+function getOffset(el) {
+  el = el.getBoundingClientRect();
+  return {
+    left: el.left + window.scrollX,
+    top: el.top + window.scrollY
+  }
+}
+
+</script>
+</body></html>
