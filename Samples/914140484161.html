@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>914140484161 demo</title>
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <style media="screen">
+      body {
+        font-size: 24px;
+      }
+      .Question {
+        border-bottom: 2px black solid;
+        margin-bottom: 20px;
+      }
+      .Step {
+        max-width: 800px;
+        border: 1px #f1c40f solid;
+        border-radius: 25px;
+        padding: 20px;
+        margin-top: 20px;
+      }
+      .help {
+        padding: 11px 25px;
+        display: inline-block;
+        float: right;
+        cursor: pointer;
+        font-size: 18px;
+        outline: 0;
+        background: transparent;
+        border-radius: 4px;
+        border: 1px solid #999;
+        color: #999;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
+        -ms-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        text-align: center;
+        transition: background-color 0.5s;
+        user-select: none;
+      }
+      .help:hover {
+        background: #bbb !important;
+        color: #fff;
+      }
+      .Working {
+        height: 0;
+        overflow: hidden;
+        transition: height 0.5s;
+      }
+      .conclusion {
+        overflow: hidden;
+        transition: height 0.5s;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="Question">
+      Find the area of the gray part.
+
+      <img src="figure.png" alt="Diagram" height="400px">
+    </div>
+    <div class="Answer">
+
+      The area of the gray part is equal to the difference of the areas of the outer rectangle and the inner square.
+
+      <div class="Step">
+        The area of the inner square is
+
+        <button type="button" name="help" class="help" id="help1">?</button>
+
+        <div class="Working" id="working1">
+            \[ \begin{align}
+              \text{Area} & = \text{sidelength} \times \text{sidelength} \\
+                          & = 24 \text{ cm} \times 24 \text{ cm}\\
+                          & = 576 \text{ cm}^2 \text.
+            \end{align}\]
+        </div>
+
+        <div class="conclusion" id="conclusion1">
+          \[576 \text{ cm}^2 \text{.}\]
+        </div>
+      </div>
+      <div class="Step">
+        The area of the outer rectangle is
+
+        <button type="button" name="help" class="help" id="help2">?</button>
+
+        <div class="Working" id="working2">
+          \[ \begin{align}
+            \text{Area} & = \text{length} \times \text{width} \\
+                        & = 78 \text{ cm} \times 64 \text{ cm}\\
+                        & = 4992 \text{ cm}^2 \text.
+          \end{align}\]
+        </div>
+
+        <div class="conclusion" id="conclusion2">
+          \[4992 \text{ cm}^2 \text{.}\]
+        </div>
+      </div>
+
+      <div class="Step">
+
+        Hence, the area of the gray part is
+
+        <button type="button" name="help" class="help" id="help3">?</button>
+
+        <div class="Working" id="working3">
+          \[ \begin{align}
+            \text{Area of gray part} & = \text{Area of outer rectangle} - \text{Area of inner square} \\
+                        & = 4992 \text{ cm}^2 - 576 \text{ cm}^2 \\
+                        & = 4416 \text{ cm}^2 \text.
+          \end{align}\]
+        </div>
+
+        <div class="conclusion" id="conclusion3">
+          \[4416 \text{ cm}^2 \text{.}\]
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+    initButton("help1", "working1", "conclusion1", 120);
+    initButton("help2", "working2", "conclusion2", 120);
+    initButton("help3", "working3", "conclusion3", 120);
+
+    function initButton(buttonID, workingID, conclusionID, height) {
+      var button = document.getElementById(buttonID);
+      var working = document.getElementById(workingID);
+      var conclusion = document.getElementById(conclusionID);
+      button.addEventListener("mousedown", function() {
+        if (button.innerHTML === "?") {
+          button.innerHTML = "&minus;";
+          working.style.height = height + "px";
+          conclusion.oldHeight = getComputedStyle(conclusion).height;
+          conclusion.style.height = 0;
+        } else {
+          button.innerHTML = "?";
+          button.style.background = "transparent";
+          working.style.height = "0";
+          conclusion.style.height = conclusion.oldHeight;
+        }
+      });
+    }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>742140604175 demo</title>
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <style media="screen">
+      body {
+        font-size: 24px;
+      }
+      .Question {
+        border-bottom: 2px black solid;
+        margin-bottom: 20px;
+      }
+      .Step {
+        max-width: 800px;
+        border: 1px #f1c40f solid;
+        border-radius: 25px;
+        padding: 20px;
+        margin-top: 20px;
+      }
+      .help {
+        padding: 11px 25px;
+        display: inline-block;
+        float: right;
+        cursor: pointer;
+        font-size: 18px;
+        outline: 0;
+        background: transparent;
+        border-radius: 4px;
+        border: 1px solid #999;
+        color: #999;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
+        -ms-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        text-align: center;
+        transition: background-color 0.5s;
+        user-select: none;
+      }
+      .help:hover {
+        background: #bbb !important;
+        color: #fff;
+      }
+      .Working {
+        height: 0;
+        overflow: hidden;
+        transition: height 0.5s;
+      }
+      .conclusion {
+        overflow: hidden;
+        transition: height 0.5s;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="Question">
+      In the following figure, \(AC=CD\), \(AB=BD\), \(m\angle ABC=81^\circ\), and \(m\angle A=43^\circ\). Find \(m\angle ACD\).
+    </div>
+    <div class="Answer">
+
+      <div class="Step">
+        As the sum of a triangle's angle measures is \(180^\circ\),
+
+        <button type="button" name="help" class="help" id="help1">?</button>
+
+        <div class="Working" id="working1">
+            \[ \begin{align}
+              m\angle ACB + m\angle CBA + m\angle BAC & = 180^\circ \\
+              m\angle ACB + 81^\circ + 43^\circ & = 180^\circ \\
+              m\angle ACB + 124^\circ & = 180^\circ \\
+              m\angle ACB & = 180^\circ - 124^\circ \\
+              m\angle ACB & = 56^\circ \text{.}
+            \end{align}\]
+        </div>
+
+        <div class="conclusion" id="conclusion1">
+          \[m\angle ACB = 56^\circ \text{.}\]
+        </div>
+      </div>
+
+      <div class="Step">
+        <button type="button" name="help" class="help" id="help2">?</button>
+
+        <div class="Working" id="working2">
+          <p>Consider \(\triangle ABC\) and \(\triangle DBC\).</p>
+          <p>\(AB = BD\), \(AC = CD\) and \(\overline{BC}\) is common to both triangles.</p>
+          <p>Hence, by the SSS criterion for congruence, \(\triangle ABC \equiv \triangle DBC\).</p>
+        </div>
+
+        <div class="conclusion" id="conclusion2">
+          \[\text{By the SSS criterion for congruence, }\triangle ABC \equiv \triangle DBC \text.\]
+        </div>
+      </div>
+
+
+      <div class="Step">
+
+        <button type="button" name="help" class="help" id="help3">?</button>
+
+        <div class="Working" id="working3">
+          <p>\(\angle BCD\) and \(\angle ACB\) are corresponding angles of congruent triangles.</p>
+          Hence
+          \[ \begin{align}
+            m\angle BCD &= m\angle ACB \\
+                        &= 56^\circ \text.
+          \end{align}\]
+        </div>
+
+        <div class="conclusion" id="conclusion3">
+           \[\text{Hence } m\angle BCD = 56^\circ \text.\]
+        </div>
+      </div>
+
+      <div class="Step">
+
+        Putting these results together, we get
+
+        <button type="button" name="help" class="help" id="help4">?</button>
+
+        <div class="Working" id="working4">
+
+          \[ \begin{align}
+            m\angle ACD & = m\angle ACB + m\angle BCD \\
+                        & = 56^\circ + 56^\circ \\
+                        & = 112^\circ \text{.}
+          \end{align}\]
+        </div>
+
+        <div class="conclusion" id="conclusion4">
+          \[m\angle ACD = 112^\circ \text{.}\]
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+    initButton("help1", "working1", "conclusion1", 200);
+    initButton("help2", "working2", "conclusion2", 180);
+    initButton("help3", "working3", "conclusion3", 200);
+    initButton("help4", "working4", "conclusion4", 120);
+
+    function initButton(buttonID, workingID, conclusionID, height) {
+      var button = document.getElementById(buttonID);
+      var working = document.getElementById(workingID);
+      var conclusion = document.getElementById(conclusionID);
+      button.addEventListener("mousedown", function() {
+        if (button.innerHTML === "?") {
+          button.innerHTML = "&minus;";
+          working.style.height = height + "px";
+          conclusion.oldHeight = getComputedStyle(conclusion).height;
+          conclusion.style.height = 0;
+        } else {
+          button.innerHTML = "?";
+          button.style.background = "transparent";
+          working.style.height = "0";
+          conclusion.style.height = conclusion.oldHeight;
+        }
+      });
+    }
+    </script>
+  </body>
+</html>

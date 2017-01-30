@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>767107584130 demo</title>
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <style media="screen">
+      body {
+        font-size: 24px;
+      }
+      .Question {
+        border-bottom: 2px black solid;
+        margin-bottom: 20px;
+      }
+      .Step {
+        max-width: 800px;
+        border: 1px #f1c40f solid;
+        border-radius: 25px;
+        padding: 20px;
+        margin-top: 20px;
+      }
+      .help {
+        padding: 11px 25px;
+        display: inline-block;
+        float: right;
+        cursor: pointer;
+        font-size: 18px;
+        outline: 0;
+        background: transparent;
+        border-radius: 4px;
+        border: 1px solid #999;
+        color: #999;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
+        -ms-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        text-align: center;
+        transition: background-color 0.5s;
+        user-select: none;
+      }
+      .help:hover {
+        background: #bbb !important;
+        color: #fff;
+      }
+      .Working {
+        height: 0;
+        overflow: hidden;
+        transition: height 0.5s;
+      }
+      .conclusion {
+        overflow: hidden;
+        transition: height 0.5s;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="Question">
+      Determine the global maximum and minimum values of the function \(f(x) =  \begin{cases} (x + 8)^2 & \text{for } x < -1 \\ (x - 7)^2 & \text{for } x \geq -1 \end{cases}\) over the interval \([-3, 5]\).
+    </div>
+    <div class="Answer">
+
+      We split the interval \([-3, 5]\) into the intervals \([-3, -1)\) and \([-1, 5]\) and consider them separately:
+
+      <div class="Step">
+        <button type="button" name="help" class="help" id="help1">?</button>
+
+        <div class="conclusion" id="conclusion1">
+          The minimum value of \(f(x)\) on the interval \([-3, -1)\) is \(25\), and the maximum (unattained) is \(49\).
+        </div>
+
+        <div class="Working" id="working1">
+
+          <p>In this interval, \(f(x) = (x + 8)^2\).</p>
+
+          <div class="Step">
+            <button type="button" name="help" class="help" id="help1_1">?</button>
+
+            <div class="conclusion" id="conclusion1_1">
+
+              The values at the endpoints of the interval \([-3, -1)\) are
+              \[f(-3) = 25 \text{ (attained) and } \lim_{x \to -1^-} f(x) = 49 \text{ (not attained).}\]
+            </div>
+
+            <div class="Working" id="working1_1">
+              At the lower endpoint, when \(x = -3\):
+
+              \[ \begin{align}
+                f(-3) & = ((-3) + 8)^2 \\
+                      & = 5^2 \\
+                      & = 25 \text.
+                \end{align} \]
+
+              As the interval is right-open, for the upper endpoint we evaluate:
+
+              \[ \begin{align}
+                \lim_{x \to -1^-} f(x) & = \lim_{x \to -1^-} (x + 8)^2 \\
+                                       & = ((-1) + 8)^2 \\
+                                       & = 7^2 \\
+                                       & = 49 \text.
+                \end{align} \]
+
+              Note that this value is not attained on the interval \([-3, -1)\), but any value suitably close will be.
+
+            </div>
+
+          </div>
+
+          <div class="Step">
+            <button type="button" name="help" class="help" id="help1_2">?</button>
+
+            <div class="conclusion" id="conclusion1_2">
+              There are no critical points in the interval \([-3, -1)\), so the function is monotonic on this interval.
+            </div>
+
+            <div class="Working" id="working1_2">
+              To do this, we find must find where the derivative is zero.
+
+              <p>In this interval,</p>
+              \[ \begin{align}
+                f'(x) & = \frac{d}{dx} (x + 8)^2 \\
+                      & = 2(x + 8) \text.
+              \end{align} \]
+
+              The critical values of \(x\) are where
+              \[ \begin{align}
+                    f'(x) & = 0 \\
+                 2(x + 8) & = 0 \\
+                    x + 8 & = 0 \\
+                        x & = -8 \text.
+              \end{align} \]
+
+              As this lies outside the interval \([-3, -1)\), there are no critical points in this interval, and the function is monotonic on this interval.
+            </div>
+
+          </div>
+          <p>
+            Hence the minimum value of \(f(x)\) on this interval is \(25\), and the maximum (unattained) is \(49\).
+          </p>
+        </div>
+      </div>
+
+      <div class="Step">
+        <button type="button" name="help" class="help" id="help2">?</button>
+
+        <div class="conclusion" id="conclusion2">
+          The minimum value of \(f(x)\) on the interval \([-1, 5]\) is \(4\), and the maximum is \(64\).
+        </div>
+
+        <div class="Working" id="working2">
+
+          <p>In this interval, \(f(x) = (x - 7)^2\).</p>
+
+          <div class="Step">
+            <button type="button" name="help" class="help" id="help2_1">?</button>
+
+            <div class="conclusion" id="conclusion2_1">
+
+              The values at the endpoints of the interval \([-1, 5]\) are
+              \[f(-1) = 64 \text{ and } f(5) = 4 \text{.}\]
+            </div>
+
+            <div class="Working" id="working2_1">
+              At the lower endpoint, when \(x = -1\):
+
+              \[ \begin{align}
+                f(-1) & = ((-1) - 7)^2 \\
+                      & = (-8)^2 \\
+                      & = 64 \text.
+                \end{align} \]
+
+              At the lower endpoint, when \(x = -1\):
+
+              \[ \begin{align}
+                f(5) & = (5 - 7)^2 \\
+                      & = (-2)^2 \\
+                      & = 4 \text.
+                \end{align} \]
+            </div>
+          </div>
+
+          <div class="Step">
+            <button type="button" name="help" class="help" id="help2_2">?</button>
+
+            <div class="conclusion" id="conclusion2_2">
+              There are no critical points in the interval \([-1, 5]\), so the function is monotonic on this interval.
+            </div>
+
+            <div class="Working" id="working2_2">
+              To do this, we find must find where the derivative is zero.
+
+              <p>In this interval,</p>
+              \[ \begin{align}
+                f'(x) & = \frac{d}{dx} (x - 7)^2 \\
+                      & = 2(x - 7) \text.
+              \end{align} \]
+
+              The critical values of \(x\) are where
+              \[ \begin{align}
+                    f'(x) & = 0 \\
+                 2(x - 7) & = 0 \\
+                    x - 7 & = 0 \\
+                        x & = 7 \text.
+              \end{align} \]
+
+              As this lies outside the interval \([-1, 5]\), there are no critical points in this interval, and the function is monotonic on this interval.
+            </div>
+
+          </div>
+          <p>
+            Hence the minimum value of \(f(x)\) on this interval is \(4\), and the maximum is \(64\).
+          </p>
+        </div>
+      </div>
+      Hence, the absolute maximum of \(f(x) =  \begin{cases} (x + 8)^2 & \text{for } x < -1 \\ (x - 7)^2 & \text{for } x \geq -1 \end{cases}\) on the interval \([-3, 5]\) is \(64\), and the absolute minimum is \(4\).
+    </div>
+
+    <script type="text/javascript">
+
+    initButton("help1", "working1", "conclusion1", 1200);
+    initButton("help1_1", "working1_1", "conclusion1_1", 460);
+    initButton("help1_2", "working1_2", "conclusion1_2", 520);
+    initButton("help2", "working2", "conclusion2", 1200);
+    initButton("help2_1", "working2_1", "conclusion2_1", 340);
+    initButton("help2_2", "working2_2", "conclusion2_2", 520);
+
+    function initButton(buttonID, workingID, conclusionID, height) {
+      var button = document.getElementById(buttonID);
+      var working = document.getElementById(workingID);
+      var conclusion = document.getElementById(conclusionID);
+      button.addEventListener("mousedown", function() {
+        if (button.innerHTML === "?") {
+          button.innerHTML = "&minus;";
+          working.style.height = height + "px";
+          conclusion.oldHeight = getComputedStyle(conclusion).height;
+          conclusion.style.height = 0;
+        } else {
+          button.innerHTML = "?";
+          button.style.background = "transparent";
+          working.style.height = "0";
+          conclusion.style.height = conclusion.oldHeight;
+        }
+      });
+    }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>785159321715 demo</title>
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <style media="screen">
+      body {
+        font-size: 24px;
+      }
+      .Question {
+        border-bottom: 2px black solid;
+        margin-bottom: 20px;
+      }
+      .Step {
+        max-width: 800px;
+        border: 1px #f1c40f solid;
+        border-radius: 25px;
+        padding: 20px;
+        margin-top: 20px;
+      }
+      .help {
+        padding: 11px 25px;
+        display: inline-block;
+        float: right;
+        cursor: pointer;
+        font-size: 18px;
+        outline: 0;
+        background: transparent;
+        border-radius: 4px;
+        border: 1px solid #999;
+        color: #999;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
+        -ms-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        text-align: center;
+        transition: background-color 0.5s;
+        user-select: none;
+      }
+      .help:hover {
+        background: #bbb !important;
+        color: #fff;
+      }
+      .Working {
+        height: 0;
+        overflow: hidden;
+        transition: height 0.5s;
+      }
+      .conclusion {
+        overflow: hidden;
+        transition: height 0.5s;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="Question">
+      In a triangle \(ABC\), \(a = 18 \text{ cm}\), \(b = 10 \text{ cm}\), and \(m \angle C = 76^\circ\). Find \(m \angle A\) approximated to the nearest second.
+    </div>
+    <div class="Answer">
+
+      <div class="Step">
+        <button type="button" name="help" class="help" id="help1">?</button>
+
+        <div class="conclusion" id="conclusion1">
+          We apply the cosine rule to find that \(c = 18.35505\ldots \text{ cm}\).
+        </div>
+
+        <div class="Working" id="working1">
+
+          We are given the lengths of two sides and the measure of the included angle, and so the only thing we can do is to apply the cosine rule to find \(c\):
+
+            \[\begin{align}
+              c^2 & = a^2 + b^2 - 2ab\cos C \\
+                  & = 18^2 + 10^2 - 2\times18\times10\times\cos{76^\circ} \\
+                  & = 324 + 100 - 360\cos{76^\circ} \\
+                  & = 336.908117\ldots \\
+            \end{align}\]
+
+            Hence,
+
+            \[\begin{align}
+              c   & = \sqrt{336.90811\ldots} \\
+                  & = 18.35505\ldots \text{ cm.}
+            \end{align}\]
+        </div>
+
+      </div>
+
+      <div class="Step">
+
+        <button type="button" name="help" class="help" id="help2">?</button>
+
+        <div class="conclusion" id="conclusion2">
+           We apply the sine rule to sides \(a\) and \(c\), to find that \(m\angle A \approx 72^\circ5'14''\).
+        </div>
+
+        <div class="Working" id="working2">
+          Now that we know the lengths of all three sides, we could apply the cosine rule to find \(m\angle A\). However, it is easier to apply the sine rule.
+
+          <p>Rearranging \(\frac{\sin{A}}{a} = \frac{\sin{C}}{c}\) and substituting the known values, we get:</p>
+
+          \[\begin{align}
+                      \sin{A} & = a\frac{\sin{C}}{c} \\
+                              & = 18\frac{\sin{76^\circ}}{18.35505\ldots} \\
+                              & = 0.95152\ldots
+          \end{align}\]
+
+          Hence,
+
+          \[\begin{align}
+                      m\angle{A} & = \sin^{-1} (0.95152\ldots) \\
+                                 & = 72^\circ5'14'' \text.
+          \end{align}\]
+        </div>
+
+      </div>
+    </div>
+    <script type="text/javascript">
+
+    initButton("help1", "working1", "conclusion1", 350);
+    initButton("help2", "working2", "conclusion2", 440);
+
+    function initButton(buttonID, workingID, conclusionID, height) {
+      var button = document.getElementById(buttonID);
+      var working = document.getElementById(workingID);
+      var conclusion = document.getElementById(conclusionID);
+      button.addEventListener("mousedown", function() {
+        if (button.innerHTML === "?") {
+          button.innerHTML = "&minus;";
+          working.style.height = height + "px";
+          conclusion.oldHeight = getComputedStyle(conclusion).height;
+          conclusion.style.height = 0;
+        } else {
+          button.innerHTML = "?";
+          button.style.background = "transparent";
+          working.style.height = "0";
+          conclusion.style.height = conclusion.oldHeight;
+        }
+      });
+    }
+    </script>
+  </body>
+</html>

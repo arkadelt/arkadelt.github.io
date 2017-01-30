@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>906160928053 demo</title>
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <style media="screen">
+      body {
+        font-size: 24px;
+      }
+      .Question {
+        border-bottom: 2px black solid;
+        margin-bottom: 20px;
+      }
+      .Step {
+        max-width: 800px;
+        border: 1px #f1c40f solid;
+        border-radius: 25px;
+        padding: 20px;
+        margin-top: 20px;
+      }
+      .help {
+        padding: 11px 25px;
+        display: inline-block;
+        float: right;
+        cursor: pointer;
+        font-size: 18px;
+        outline: 0;
+        background: transparent;
+        border-radius: 4px;
+        border: 1px solid #999;
+        color: #999;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
+        -ms-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        text-align: center;
+        transition: background-color 0.5s;
+        user-select: none;
+      }
+      .help:hover {
+        background: #bbb !important;
+        color: #fff;
+      }
+      .Working {
+        height: 0;
+        overflow: hidden;
+        transition: height 0.5s;
+      }
+      .conclusion {
+        overflow: hidden;
+        transition: height 0.5s;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="Question">
+      Find the square roots of \(2 + 2\sqrt3i\).
+    </div>
+    <div class="Answer">
+
+      <div class="Step">
+        <button type="button" name="help" class="help" id="help1">?</button>
+
+        We express \(2 + 2\sqrt3i\) in trigonometric form:
+
+        <div class="Working" id="working1">
+
+          <p>To write a complex number in trigonometric form, we must find its modulus and argument.</p>
+
+          <div class="Step">
+            <button type="button" name="help" class="help" id="help1.1">?</button>
+
+            We find the modulus of \(2 + 2\sqrt3i\):
+
+            <div class="Working" id="working1.1">
+
+              <p>The modulus of a complex number \(a + bi\) is defined as \(\left|a + bi\right| = \sqrt{a^2 + b^2}\).</p>
+              Hence,
+              \[ \begin{align}
+                \left|2 + 2\sqrt3i\right| & = \sqrt{2^2 + \left(2\sqrt3\right)^2} \\
+                                          & = \sqrt{4 + 12} \\
+                                          & = \sqrt{16} \\
+                                          & = 4 \text.
+                \end{align} \]
+            </div>
+
+            <div class="conclusion" id="conclusion1.1">
+              \[\left|2 + 2\sqrt3i\right| = 4 \]
+            </div>
+          </div>
+
+          <div class="Step">
+            <button type="button" name="help" class="help" id="help1.2">?</button>
+
+            We find the argument of \(2 + 2\sqrt3i\):
+
+            <div class="Working" id="working1.2">
+
+              <p>As \(2 + 2\sqrt3i\) lies in the first quadrant,</p>
+
+              \[ \begin{align}
+                \arg \left(2 + 2\sqrt3i\right) & = \tan^{-1}\left(\frac{2\sqrt3}{2}\right) \\
+                       & = \tan^{-1} \sqrt3 \\
+                       & = \frac{\pi}{3} \text.
+                \end{align} \]
+            </div>
+
+            <div class="conclusion" id="conclusion1.2">
+              \[\arg \left(2 + 2\sqrt3i\right) = \frac{\pi}{3} \]
+            </div>
+          </div>
+
+          <p>
+            Substituting these values into the formula \[z = |z|\Bigl(\cos(\arg z) + i\sin(\arg z) \Bigr) \text,\] we get:
+            \[ 2 + 2\sqrt3i  = 4\left(\cos{\frac{\pi}{3}} + i\sin{\frac{\pi}{3}}\right) \text. \]
+          </p>
+        </div>
+
+        <div class="conclusion" id="conclusion1">
+          \[2 + 2\sqrt3i = 4\left(\cos{\frac{\pi}{3}} + i\sin{\frac{\pi}{3}}\right) \text.\]
+        </div>
+      </div>
+
+      <div class="Step">
+        <button type="button" name="help" class="help" id="help2">?</button>
+
+        Using the trigonometric form, we apply De Moivre's Theorem:
+
+        <div class="Working" id="working2">
+          \[ \begin{align}
+            \left(2 + 2\sqrt3i\right)^\frac{1}{2} & = \left(4\left(\cos{\frac{\pi}{3}} + i\sin{\frac{\pi}{3}}\right)\right)^\frac{1}{2} \\
+                                                  & = 4^{\frac{1}{2}}\left(\cos{\frac{\pi}{3}} + i\sin{\frac{\pi}{3}}\right)^\frac{1}{2} \\
+                                                  & = 2\left(\cos{\frac{\pi}{3}} + i\sin{\frac{\pi}{3}}\right)^\frac{1}{2}
+            \end{align} \]
+
+            De Moivre's Theorem for fractional powers states that
+
+            \[\left(\cos\theta + i\sin\theta\right)^\frac{1}{n} = \cos\left(\frac{2m\pi + \theta}{n}\right) + i\sin\left(\frac{2m\pi + \theta}{n}\right) \]
+                where \(m = 0, 1, \ldots, n - 1\). Hence
+
+            \[\left(\cos\frac{\pi}{3} + i\sin\frac{\pi}{3}\right)^\frac{1}{2} = \cos\left(\frac{2m\pi + \frac{\pi}{3}}{2}\right) + i\sin\left(\frac{2m\pi + \frac{\pi}{3}}{2}\right) \]
+                where \(m = 0, 1\). Therefore,
+
+            \[\left(2 + 2\sqrt3i\right)^\frac{1}{2} = 2\left(\cos{\left(\frac{\frac{\pi}{3} + 2m\pi}{2}\right)} + i\sin{\left(\frac{\frac{\pi}{3} + 2m\pi}{2}\right)}\right) \]
+                where \(m = 0, 1\).
+
+        </div>
+
+        <div class="conclusion" id="conclusion2">
+          \[\left(2 + 2\sqrt3i\right)^\frac{1}{2} = 2\left(\cos{\left(\frac{\frac{\pi}{3} + 2m\pi}{2}\right)} + i\sin{\left(\frac{\frac{\pi}{3} + 2m\pi}{2}\right)}\right) \]
+          where \(m = 0, 1\).
+        </div>
+      </div>
+
+      <div class="Step">
+
+        <button type="button" name="help" class="help" id="help3">?</button>
+
+        <p>We substitute \(0\) and \(1\) for \(m\) in the above formula and simplify:</p>
+
+        <div class="Working" id="working3">
+          When \(m = 0\):
+          \[ \begin{align}
+            \left(2 + 2\sqrt3i\right)^\frac{1}{2} & = 2\left(\cos{\left(\frac{\frac{\pi}{3} + 2\times0\times\pi}{2}\right)} + i\sin{\left(\frac{\frac{\pi}{3} + 2\times0\times\pi}{2}\right)}\right)\\
+                                                  & = 2\left(\cos{\frac{\pi}{6}} + i\sin{\frac{\pi}{6}}\right) \\
+                                                  & = 2\left(\frac{\sqrt3}{2} + \frac{1}{2}i \right) \\
+                                                  & = \sqrt3 + i\text{.}
+            \end{align} \]
+
+            When \(m = 1\):
+            \[ \begin{align}
+              \left(2 + 2\sqrt3i\right)^\frac{1}{2} & = 2\left(\cos{\left(\frac{\frac{\pi}{3} + 2\times1\times\pi}{2}\right)} + i\sin{\left(\frac{\frac{\pi}{3} + 2\times1\times\pi}{2}\right)}\right)\\
+                                                    & = 2\left(\cos{\frac{7\pi}{6}} + i\sin{\frac{7\pi}{6}}\right) \\
+                                                    & = 2\left(-\frac{\sqrt3}{2} - \frac{1}{2} i\right) \\
+                                                    & = -\sqrt3 - i\text{.}
+              \end{align} \]
+        </div>
+
+        <div class="conclusion" id="conclusion3">
+           The square roots of \(2 + 2\sqrt3i\) are \(\sqrt{3} + i\) and \(-\sqrt{3} - i\).
+        </div>
+      </div>
+
+    </div>
+    <script type="text/javascript">
+
+    initButton("help1", "working1", "conclusion1", 700);
+    initButton("help1.1", "working1.1", "conclusion1.1", 320);
+    initButton("help1.2", "working1.2", "conclusion1.2", 250);
+    initButton("help2", "working2", "conclusion2", 680);
+    initButton("help3", "working3", "conclusion3", 620);
+
+    function initButton(buttonID, workingID, conclusionID, height) {
+      var button = document.getElementById(buttonID);
+      var working = document.getElementById(workingID);
+      var conclusion = document.getElementById(conclusionID);
+      button.addEventListener("mousedown", function() {
+        if (button.innerHTML === "?") {
+          button.innerHTML = "&minus;";
+          working.style.height = height + "px";
+          conclusion.oldHeight = getComputedStyle(conclusion).height;
+          conclusion.style.height = 0;
+        } else {
+          button.innerHTML = "?";
+          button.style.background = "transparent";
+          working.style.height = "0";
+          conclusion.style.height = conclusion.oldHeight;
+        }
+      });
+    }
+    </script>
+  </body>
+</html>
