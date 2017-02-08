@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>754125751034 demo</title>
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <style media="screen">
+      body {
+        font-size: 24px;
+      }
+      .Question {
+        border-bottom: 2px black solid;
+        margin-bottom: 20px;
+      }
+      .Step {
+        max-width: 800px;
+        border: 1px #f1c40f solid;
+        border-radius: 25px;
+        padding: 20px;
+        margin-top: 20px;
+      }
+      .help {
+        padding: 11px 25px;
+        display: inline-block;
+        float: right;
+        cursor: pointer;
+        font-size: 18px;
+        outline: 0;
+        background: transparent;
+        border-radius: 4px;
+        border: 1px solid #999;
+        color: #999;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
+        -ms-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        text-align: center;
+        transition: background-color 0.5s;
+        user-select: none;
+      }
+      .help:hover {
+        background: #bbb !important;
+        color: #fff;
+      }
+      .Working {
+        height: 0;
+        overflow: hidden;
+        transition: height 0.5s;
+      }
+      .conclusion {
+        overflow: hidden;
+        transition: height 0.5s;
+      }
+      table {
+        border-collapse: collapse;
+        border-spacing: 0px;
+        margin: 10px;
+      }
+      table, td, th {
+        border: 1px solid black;
+        padding: 5px;
+      }
+      .woo {
+        background-color: lime;
+      }
+    </style>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+
+    </script>
+  </head>
+  <body>
+    <div class="Question">
+      Find algebraically the solution set of \(4\left|6 - x\right| - \sqrt{x^2 - 12x + 36} = 15\) in \(\mathbb R\).
+    </div>
+    <div class="Answer">
+
+      <div class="Step">
+        <button type="button" name="help" class="help" id="help1">?</button>
+
+        <div class="conclusion" id="conclusion1">
+          We first note that
+
+          \[\begin{align}
+            \sqrt{x^2 - 12x + 36} & = \sqrt{(6 - x)^2} \\
+                                  & = \left|6 - x\right|\text.
+          \end{align}\]
+        </div>
+
+        <div class="Working" id="working1">
+          Factorising \(x^2 - 12x + 36\) gives \((x - 6)^2\), hence
+
+          \[\sqrt{x^2 - 12x + 36} = \sqrt{(x - 6)^2} \text.\]
+
+          As \(\sqrt{a^2} = \left|a\right|\),
+
+          \[\sqrt{x^2 - 12x + 36} = \left|x - 6\right| \text.\]
+
+          As \(\left|a\right| = \left|-a\right|\),
+
+          \[\begin{align}
+            \sqrt{x^2 - 12x + 36} & = \left|- (x - 6)\right| \\
+                                  & = \left|6 - x\right|\text.
+          \end{align}\]
+        </div>
+      </div>
+
+      <div class="Step">
+        <button type="button" name="help" class="help" id="help2">?</button>
+
+        <div class="conclusion" id="conclusion2">
+          Substituting \(\left|6 - x\right|\) for \(\sqrt{x^2 - 12x + 36}\) in the equation and simplifying, we get
+
+          \[\left|6 - x\right| = 5 \text.\]
+        </div>
+
+        <div class="Working" id="working2">
+          Substituting \(\left|6 - x\right|\) for \(\sqrt{x^2 - 12x + 36}\) in the equation and simplifying, we get
+
+          \[\begin{align}
+            4\left|6 - x\right| - \sqrt{x^2 - 12x + 36} & = 15 \\
+               4\left|6 - x\right| - \left|6 - x\right| & = 15 \\
+                                    3\left|6 - x\right| & = 15 \\
+                                     \left|6 - x\right| & = 5 \text.
+          \end{align}\]
+        </div>
+      </div>
+
+      <div class="Step">
+        <button type="button" name="help" class="help" id="help3">?</button>
+
+        <div class="conclusion" id="conclusion3">
+          Considering the cases \(x \geq 6\) and \(x < 6\) separately, we find the solution set is
+
+          \[\{1, 11\}\text.\]
+        </div>
+
+        <div class="Working" id="working3">
+          <ul>
+            Case 1: When \(x \geq 6\), \(\left|6 - x\right| = x - 6\). Therefore,
+            \[\begin{align}
+            \left|6 - x\right| & = 5 \\
+                         x - 6 & = 5 \\
+                             x & = 11 \text.
+            \end{align}\]
+          </ul>
+          <ul>
+            Case 2: When \(x < 6\), \(\left|6 - x\right| = 6 - x\). Therefore,
+            \[\begin{align}
+            \left|6 - x\right| & = 5 \\
+                         6 - x & = 5 \\
+                             x & = 1 \text.
+            \end{align}\]
+          </ul>
+          Therefore, the solution set of the equation is \(\{1, 11\}\).
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+    initButton("help1", "working1", "conclusion1", 370);
+    initButton("help2", "working2", "conclusion2", 230);
+    initButton("help3", "working3", "conclusion3", 400);
+
+    function initButton(buttonID, workingID, conclusionID, height) {
+      var button = document.getElementById(buttonID);
+      var working = document.getElementById(workingID);
+      var conclusion = document.getElementById(conclusionID);
+      button.addEventListener("mousedown", function() {
+        if (button.innerHTML === "?") {
+          button.innerHTML = "&minus;";
+          working.style.height = height + "px";
+          conclusion.oldHeight = getComputedStyle(conclusion).height;
+          conclusion.style.height = 0;
+        } else {
+          button.innerHTML = "?";
+          button.style.background = "transparent";
+          working.style.height = "0";
+          conclusion.style.height = conclusion.oldHeight;
+        }
+      });
+    }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>804129867643 demo</title>
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <style media="screen">
+      body {
+        font-size: 24px;
+      }
+      .Question {
+        border-bottom: 2px black solid;
+        margin-bottom: 20px;
+      }
+      .Step {
+        max-width: 800px;
+        border: 1px #f1c40f solid;
+        border-radius: 25px;
+        padding: 20px;
+        margin-top: 20px;
+      }
+      .help {
+        padding: 11px 25px;
+        display: inline-block;
+        float: right;
+        cursor: pointer;
+        font-size: 18px;
+        outline: 0;
+        background: transparent;
+        border-radius: 4px;
+        border: 1px solid #999;
+        color: #999;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
+        -ms-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        text-align: center;
+        transition: background-color 0.5s;
+        user-select: none;
+      }
+      .help:hover {
+        background: #bbb !important;
+        color: #fff;
+      }
+      .Working {
+        height: 0;
+        overflow: hidden;
+        transition: height 0.5s;
+      }
+      .conclusion {
+        overflow: hidden;
+        transition: height 0.5s;
+      }
+      table {
+        border-collapse: collapse;
+        border-spacing: 0px;
+        margin: 10px;
+      }
+      table, td, th {
+        border: 1px solid black;
+        padding: 5px;
+      }
+      .woo {
+        background-color: lime;
+      }
+    </style>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+
+    </script>
+  </head>
+  <body>
+    <div class="Question">
+      Find the solution set of \(2^{2x-2} - 130\times2^{x-1} + 256 = 0\).
+    </div>
+    <div class="Answer">
+
+      <div class="Step">
+        <button type="button" name="help" class="help" id="help1">?</button>
+
+        <div class="conclusion" id="conclusion1">
+          We can write this equation as a quadratic in \(2^{x-1}\):
+
+          \[(2^{x-1})^2 - 130\times(2^{x-1}) + 256 = 0 \text.\]
+        </div>
+
+        <div class="Working" id="working1">
+          Using the index law \(a^{m\times n} = \left(a^m\right)^n\) we see that
+
+          \[\begin{align}
+            2^{2x-2} & = 2^{(x-1)\times2} \\
+                     & = \left(2^{(x-1)}\right)^2 \text.
+          \end{align}\]
+
+          Hence the equation
+
+          \[
+            2^{2x-2} - 130\times2^{x-1} + 256 = 0
+          \]
+
+          can be rewritten as
+
+          \[(2^{x-1})^2 - 130\times(2^{x-1}) + 256 = 0 \text.\]
+          </aside>
+
+          </aside>
+
+        </div>
+      </div>
+
+      <div class="Step">
+        <button type="button" name="help" class="help" id="help2">?</button>
+
+        <div class="conclusion" id="conclusion2">
+          We solve this equation for \(2^{x-1}\) to find that
+
+          \[2^{x-1} = 128 \text{ or } 2^{x-1} = 2\text.\]
+        </div>
+
+        <div class="Working" id="working2">
+          We write \(y\) for \(2^{x-1}\) to make things easier to see, the equation is then
+
+          \[ y^2 - 130y + 256 = 0 \text.\]
+
+          We solve this by factorising the left-hand side:
+
+          \[\begin{align}
+            y^2 - 130y + 256 & = y^2 - 2y - 128y + 256 \\
+                             & = y(y - 2) - 128(y - 2) \\
+                             & = (y - 128)(y - 2)
+          \end{align}\]
+
+          Hence \(y = 128\) or \(y = 2\). Turning the &#8216;\(y\)&#8217;s back into &#8216;\(2^{x-1}\)&#8217;s, we get
+
+          \[2^{x-1} = 128 \text{ or } 2^{x-1} = 2 \text.\]
+        </div>
+      </div>
+
+      <div class="Step">
+        <button type="button" name="help" class="help" id="help3">?</button>
+
+        <div class="conclusion" id="conclusion3">
+          We solve these two equations for \(x\) to find the solution set to the original equation:
+
+          \[\{2, 8\} \text.\]
+        </div>
+
+        <div class="Working" id="working3">
+          Case 1: \(2^{x-1} = 128\).
+
+          <p>We solve this by taking the logarithm of both sides and using the law \(\log{a^b} = b\log{a}\):</p>
+
+          \[\begin{align}
+                   2^{x-1} & = 128 \\
+                   2^{x-1} & = 2^7 \\
+            \log {2^{x-1}} & = \log 2^7 \\
+              (x - 1)\log2 & = 7\log2 \\
+                     x - 1 & = 7 \\
+                         x & = 8 \text.
+          \end{align}\]
+
+          Case 2: \(2^{x-1} = 2\).
+
+          <p>We solve this similarly:</p>
+
+          \[\begin{align}
+                   2^{x-1} & = 2 \\
+            \log {2^{x-1}} & = \log 2 \\
+              (x - 1)\log2 & = \log2 \\
+                     x - 1 & = 1 \\
+                         x & = 2 \text.
+          \end{align}\]
+
+          Hence the solution set is
+
+          \[\{2, 8\} \text.\]
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+    initButton("help1", "working1", "conclusion1", 370);
+    initButton("help2", "working2", "conclusion2", 430);
+    initButton("help3", "working3", "conclusion3", 730);
+
+    function initButton(buttonID, workingID, conclusionID, height) {
+      var button = document.getElementById(buttonID);
+      var working = document.getElementById(workingID);
+      var conclusion = document.getElementById(conclusionID);
+      button.addEventListener("mousedown", function() {
+        if (button.innerHTML === "?") {
+          button.innerHTML = "&minus;";
+          working.style.height = height + "px";
+          conclusion.oldHeight = getComputedStyle(conclusion).height;
+          conclusion.style.height = 0;
+        } else {
+          button.innerHTML = "?";
+          button.style.background = "transparent";
+          working.style.height = "0";
+          conclusion.style.height = conclusion.oldHeight;
+        }
+      });
+    }
+    </script>
+  </body>
+</html>

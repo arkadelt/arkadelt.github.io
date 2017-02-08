@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>853131031584 demo</title>
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <style media="screen">
+      body {
+        font-size: 24px;
+      }
+      .Question {
+        border-bottom: 2px black solid;
+        margin-bottom: 20px;
+      }
+      .Step {
+        max-width: 800px;
+        border: 1px #f1c40f solid;
+        border-radius: 25px;
+        padding: 20px;
+        margin-top: 20px;
+      }
+      .help {
+        padding: 11px 25px;
+        display: inline-block;
+        float: right;
+        cursor: pointer;
+        font-size: 18px;
+        outline: 0;
+        background: transparent;
+        border-radius: 4px;
+        border: 1px solid #999;
+        color: #999;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
+        -ms-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        text-align: center;
+        transition: background-color 0.5s;
+        user-select: none;
+      }
+      .help:hover {
+        background: #bbb !important;
+        color: #fff;
+      }
+      .Working {
+        height: 0;
+        overflow: hidden;
+        transition: height 0.5s;
+      }
+      .conclusion {
+        overflow: hidden;
+        transition: height 0.5s;
+      }
+      table {
+        border-collapse: collapse;
+        border-spacing: 0px;
+        margin: 10px;
+      }
+      table, td, th {
+        border: 1px solid black;
+        padding: 5px;
+      }
+      .woo {
+        background-color: lime;
+      }
+    </style>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+
+    </script>
+  </head>
+  <body>
+    <div class="Question">
+      Without solving the equation \((7x + 2)(8x + 1) = 0\), find the sum of its roots.
+    </div>
+    <div class="Answer">
+
+      <div class="Step">
+        <button type="button" name="help" class="help" id="help1">?</button>
+
+        <div class="conclusion" id="conclusion1">
+          Recall that the sum of the roots of \(ax^2 + bx + c = 0\) is \(-\frac{b}{a}\).
+        </div>
+
+        <div class="Working" id="working1">
+          By the quadratic formula, the roots of
+
+          \[ax^2 + bx + c = 0\]
+
+          are
+
+          \[\{L, M\} = \left\{\frac{-b-\sqrt{b^2 - 4ac}}{2a}, \frac{-b+\sqrt{b^2 - 4ac}}{2a}\right\}\text.\]
+
+          Hence, the sum of the roots is
+
+          \[\begin{align}
+            L + M & = \frac{-b - \sqrt{b^2 - 4ac}}{2a} + \frac{-b + \sqrt{b^2 - 4ac}}{2a} \\
+                  & = \frac{-b - \sqrt{b^2 - 4ac} - b + \sqrt{b^2 - 4ac}}{2a} \\
+                  & = \frac{-2b}{2a} \\
+                  & = -\frac{b}{a} \text.
+          \end{align}\]
+
+        </div>
+      </div>
+
+      <div class="Step">
+        <button type="button" name="help" class="help" id="help2">?</button>
+
+        <div class="conclusion" id="conclusion2">
+          We can expand the left-hand side of the equation to get:
+
+          \[56x^2 + 23x + 2 = 0 \text.\]
+        </div>
+
+        <div class="Working" id="working2">
+          We expand the left-hand side, to get:
+          \[\begin{align}
+            (7x + 2)(8x + 1) & = 7x(8x + 1) + 2(8x + 1) \\
+                             & = 56x^2 + 7x + 16x + 2 \\
+                             & = 56x^2 + 23x + 2 \text.
+          \end{align}\]
+
+          Hence the equation \((7x + 2)(8x + 1) = 0\) can be rewritten as
+
+          \[56x^2 + 23x + 2 = 0 \text.\]
+        </div>
+      </div>
+
+      Hence the sum of the roots of the equation is
+
+      \[-\frac{b}{a} = -\frac{23}{56} \text.\]
+    </div>
+    <script type="text/javascript">
+
+    initButton("help1", "working1", "conclusion1", 550);
+    initButton("help2", "working2", "conclusion2", 260);
+
+    function initButton(buttonID, workingID, conclusionID, height) {
+      var button = document.getElementById(buttonID);
+      var working = document.getElementById(workingID);
+      var conclusion = document.getElementById(conclusionID);
+      button.addEventListener("mousedown", function() {
+        if (button.innerHTML === "?") {
+          button.innerHTML = "&minus;";
+          working.style.height = height + "px";
+          conclusion.oldHeight = getComputedStyle(conclusion).height;
+          conclusion.style.height = 0;
+        } else {
+          button.innerHTML = "?";
+          button.style.background = "transparent";
+          working.style.height = "0";
+          conclusion.style.height = conclusion.oldHeight;
+        }
+      });
+    }
+    </script>
+  </body>
+</html>
