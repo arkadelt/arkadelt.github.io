@@ -98,7 +98,7 @@
           <th><input type="checkbox" id="dec" value=""><label for="decimal">Decimal</label></th>
         </tr>
         <tr>
-          <td><input type="checkbox" id="simpDec" value="" ><label for="simpDec">Simplified (2.5 not 02.50)</label></td>
+          <td><input type="checkbox" id="simpDec" value="" ><label for="simpDec">No unnecessary zeroes (2.5 not 02.50)</label></td>
         </tr>
       </table>
     </div>
@@ -261,7 +261,7 @@
       var wellMixed = f.isInt || f.isProperFrac || f.isValidMixed;
       var simpMixed = f.isInt || (f.isValidMixed || f.isProperFrac) && hcf(Number(m[3]), Number(m[4])) === 1;
       var dec = f.isInt || f.isDec;
-      var simpDec = f.isInt || f.isDec && d[2][0] !== "0" && d[4][d[4].length - 1] !== "0";
+      var simpDec = f.isInt || f.isDec && (d[2][0] !== "0" || d[2] === "0") && d[4][d[4].length - 1] !== "0";
 
       highlightCell("frac", frac);
       highlightCell("simpFrac", simpFrac);
