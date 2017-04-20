@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Fractions Parse</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+    <style media="screen">
+      body {
+        font-family: sans-serif;
+        font-size: 18px;
+      } .vinculum {
+        border-top: 1px solid black;
+      } .constraints {
+        display: inline-table;
+      } .constraints, .constraints td, .constraints th {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 2px;
+      } .hidden {
+        visibility: hidden;
+      } .block {
+        display: inline-block;
+        margin-right: 40px;
+      } input {
+        font-size: 24px;
+        text-align: center;
+      } select {
+        font-size: 24px;
+      } #answerNum, #answerDen {
+        width: 80px;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="block">
+      <h1> User input </h1>
+      <span id="expression"></span>
+      <button type="button" name="button" id="button">Submit</button>
+    </div>
+
+    <div class="hidden block">
+      <h1>Feedback</h1>
+      <div id="feedback">.</div>
+    </div>
+
+    <hr>
+
+    <div class="block">
+      <h1> Correct Value (CMS) <span id="valueConstraints" class="hidden"> </span></h1>
+
+      <table style="inline-table">
+        <tr>
+          <td rowspan="2">
+            <select id="pm" name="">
+              <option value="plus">+</option>
+              <option value="minus">-</option>
+            </select>
+          </td>
+          <td><input type="number" name="" value="6" id="answerNum"></td>
+        </tr>
+        <tr>
+          <td class="vinculum"><input type="number" name="" value="5" id="answerDen"></td>
+        </tr>
+      </table>
+
+      <h1> Acceptable Format (CMS) <span id="formConstraints" class="hidden"> </span></h1>
+
+      <table class = "constraints">
+        <tr>
+          <th><input type="checkbox" id="frac" value="" checked><label for="vulgar">Fraction</label></th>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="simpFrac" value="" ><label for="simpFrac">Simplified (5/2 not 10/4)</label></td>
+        </tr>
+      </table>
+
+      or
+
+      <table class = "constraints">
+        <tr>
+          <th><input type="checkbox" id="mixed" value="" checked><label for="mixed">Mixed Number</label></th>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="wellMixed" value="" checked><label for="wellMixed">Well formed (2 1/2 not 1 3/2)</label></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="simpMixed" value="" ><label for="simpMixed">Simplified (2 1/2 not 2 2/4)</label></td>
+        </tr>
+      </table>
+
+      or
+
+      <table class = "constraints">
+        <tr>
+          <th><input type="checkbox" id="dec" value=""><label for="decimal">Decimal</label></th>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="simpDec" value="" ><label for="simpDec">Simplified (2.5 not 02.50)</label></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="hidden block">
+      <h1 class="latex"> LaTeX of Input </h1>
+      <div id="latexInput"></div>
+
+      <h1> Parsed Input </h1>
+      <span id="parsedInput"></span>
+    </div>
+
+    <script>
+    var expressionSpan = document.getElementById('expression');
+    var button = document.getElementById('button');
+
+    var MQ = MathQuill.getInterface(2);
+    var expression = MQ.MathField(expressionSpan, {
+      spaceBehavesLikeTab: false
+    });
+
+    button.addEventListener("click", function() {
+      //Get the correct answer from the 'CMS'
+      var correctValue = {
+        num: document.getElementById("pm").value === "plus"? Number(document.getElementById('answerNum').value) : -1*Number(document.getElementById('answerNum').value) ,
+        den: Number(document.getElementById('answerDen').value)
+      };
+
+      //Get the allowed forms from the 'CMS' table
+      var formRequired = getRequiredForm();
+
+      //Parse the input, determining its latex, its numerical value and form:
+      var input = parseInput();
+
+      //Display the latex of the answer entered.
+      document.getElementById("latexInput").textContent = input.latex;
+
+      //Display the parsed version of the answer entered.
+      document.getElementById("parsedInput").textContent = input.message;
+
+      //Determine and display the form of the answer entered, check if it satisfies constraints from CMS.
+      var form = highlightTable(input);
+      var isFormOK = markConstraints(formRequired, form);
+      document.getElementById("formConstraints").textContent = isFormOK ? "✔" : "✘";
+      document.getElementById("formConstraints").style.color = isFormOK ? "green" : "red";
+
+      //Check and display if the value of the answer entered is correct.
+      var isValueOK = input.value.den*correctValue.num === input.value.num*correctValue.den;
+      document.getElementById("valueConstraints").textContent = isValueOK ? "✔" : "✘";
+      document.getElementById("valueConstraints").style.color = isValueOK ? "green" : "red";
+
+      //Display appropriate feedback given the form and value of the answer entered.
+      document.getElementById('feedback').textContent = getFeedback(isValueOK, isFormOK);
+
+      [].slice.call(document.getElementsByClassName("hidden")).map(function(x) { x.style.visibility = "visible"; });
+    });
+
+    function getRequiredForm () {
+      return {
+        frac: document.getElementById("frac").checked,
+        simpFrac: document.getElementById("simpFrac").checked,
+        mixed: document.getElementById("mixed").checked,
+        wellMixed: document.getElementById("wellMixed").checked,
+        simpMixed: document.getElementById("simpMixed").checked,
+        dec: document.getElementById("dec").checked,
+        simpDec: document.getElementById("simpDec").checked
+      };
+    }
+
+    function parseInput () {
+      var latex = expression.latex();
+      var parsedInt = latex.match(/(\-)?(\d*)/);
+      var parsedMixed = latex.match(/(\-)?(\d*)(?:\\\s)*(?:\\frac\{(\d*)\}\{(\d*)\})?/);
+      var parsedDecimal = latex.match(/(\-)?(\d*)(\.)?(\d*)/);
+      var parsedMessage, value, negative;
+
+      var isEmpty = latex === "";
+      var isInt = !isEmpty && parsedInt[0] === latex;
+      var isProperFrac = !isInt && parsedMixed[0] === latex && !parsedMixed[2] && Number(parsedMixed[3]) < Number(parsedMixed[4]);
+      var isVulgarFrac = !isInt && parsedMixed[0] === latex && !parsedMixed[2] && Number(parsedMixed[3]) >= Number(parsedMixed[4]);
+      var isValidMixed = !isProperFrac && !isVulgarFrac && parsedMixed[0] === latex && Number(parsedMixed[3]) < Number(parsedMixed[4]);
+      var isInvalidMixed = !isProperFrac && !isVulgarFrac && parsedMixed[0] === latex && Number(parsedMixed[3]) >= Number(parsedMixed[4]);
+      var isDec = !isEmpty && !isInt && parsedDecimal[0] === latex;
+      var isVoid = !(isInt || isProperFrac || isVulgarFrac || isValidMixed || isInvalidMixed || isDec);
+
+      if (isEmpty) {
+        parsedMessage = "This is an empty expression :(";
+        value = {num: undefined, den: undefined};
+      } else if (isInt) {
+        negative = !!parsedInt[1];
+        if (negative) {
+          parsedMessage = "This is a negative integer, equal to minus " + parsedInt[2] + ".";
+          value = {num: -Number(parsedInt[2]), den: 1};
+        } else {
+          parsedMessage = "This is a non-negative integer, equal to " + parsedInt[2] + ".";
+          value = {num: Number(parsedInt[2]), den: 1};
+        }
+      } else if (isProperFrac || isVulgarFrac) {
+        negative = !!parsedMixed[1];
+        if (negative) {
+          parsedMessage = "This is a negative fraction, with numerator minus " + parsedMixed[3] + " and denominator " + parsedMixed[4] + ".";
+          value = {num: -Number(parsedMixed[3]), den: Number(parsedMixed[4])};
+        } else {
+          parsedMessage = "This is a positive proper fraction, with numerator " + parsedMixed[3] + " and denominator " + parsedMixed[4] + ".";
+          value = {num: Number(parsedMixed[3]), den: Number(parsedMixed[4])};
+        }
+      } else if (isValidMixed || isInvalidMixed) {
+        negative = !!parsedMixed[1];
+        if (negative) {
+          parsedMessage = "This is a negative mixed number, with whole part minus " + parsedMixed[2] + " and fractional part " + parsedMixed[3] + "/" + parsedMixed[4] + ".";
+          value = {num: -(Number(parsedMixed[3]) + Number(parsedMixed[2])*Number(parsedMixed[4])) , den: Number(parsedMixed[4])};
+        } else {
+          parsedMessage = "This is a positive mixed number, with whole part " + parsedMixed[2] + " and fractional part " + parsedMixed[3] + "/" + parsedMixed[4] + ".";
+          value = {num: (Number(parsedMixed[3]) + Number(parsedMixed[2])*Number(parsedMixed[4])) , den: Number(parsedMixed[4])};
+        }
+      } else if (isDec) {
+        negative = !!parsedDecimal[1];
+        if (negative) {
+          parsedMessage = "This is the negative decimal " + latex + ".";
+        } else {
+          parsedMessage = "This is the postive decimal " + latex + ".";
+        }
+        value = {num: Number(latex), den: 1};
+      } else if (isVoid) {
+        parsedMessage = "I don't understand " + latex + ", sorry :(";
+      }
+
+      return {
+        form: {
+          isEmpty: isEmpty,
+          isInt: isInt,
+          isProperFrac: isProperFrac,
+          isVulgarFrac: isVulgarFrac,
+          isValidMixed: isValidMixed,
+          isInvalidMixed: isInvalidMixed,
+          isDec: isDec,
+          isVoid: isVoid
+        },
+        latex: latex,
+        message: parsedMessage,
+        parsed: {
+          integer: parsedInt,
+          mixed: parsedMixed,
+          decimal: parsedDecimal
+        },
+        value: value
+      };
+    }
+
+    function highlightTable (input) {
+
+      var f = input.form;
+      var m = input.parsed.mixed;
+      var d = input.parsed.decimal;
+
+      //frac is true if the input is a fraction, false otherwise, etc.
+      var frac = f.isInt || f.isProperFrac || f.isVulgarFrac;
+      var simpFrac = f.isInt || (f.isProperFrac || f.isVulgarFrac) && hcf(Number(m[3]), Number(m[4])) === 1;
+      var mixed = f.isInt || f.isProperFrac || f.isValidMixed || f.isInvalidMixed;
+      var wellMixed = f.isInt || f.isProperFrac || f.isValidMixed;
+      var simpMixed = f.isInt || (f.isValidMixed || f.isProperFrac) && hcf(Number(m[3]), Number(m[4])) === 1;
+      var dec = f.isInt || f.isDec;
+      var simpDec = f.isInt || f.isDec && d[2][0] !== "0" && d[4][d[4].length - 1] !== "0";
+
+      highlightCell("frac", frac);
+      highlightCell("simpFrac", simpFrac);
+      highlightCell("mixed", mixed);
+      highlightCell("wellMixed", wellMixed);
+      highlightCell("simpMixed", simpMixed);
+      highlightCell("dec", dec);
+      highlightCell("simpDec", simpDec);
+
+      return {
+        frac: frac,
+        simpFrac: simpFrac,
+        mixed: mixed,
+        wellMixed: wellMixed,
+        simpMixed: simpMixed,
+        dec: dec,
+        simpDec: simpDec
+      };
+
+      function highlightCell (cellID, bool) {
+        document.getElementById(cellID).parentNode.style.backgroundColor = bool ? "rgba(0,255,0,0.2)" : "rgba(255,0,0,0.2)";
+      }
+
+      function hcf(x, y) {
+        while (Math.max(x, y) % Math.min(x, y) !== 0) {
+          if (x > y) {
+            x %= y;
+          } else {
+            y %= x;
+          }
+        }
+        return Math.min(x, y);
+      }
+    }
+
+    function markConstraints(req, sat) {
+      if (req.frac && sat.frac && (!req.simpFrac || sat.simpFrac)) {
+        //satisfies the contraints on fraction form
+        return true;
+      } else if (req.mixed && sat.mixed && (!req.wellMixed || sat.wellMixed) && (!req.simpMixed || sat.simpMixed)) {
+        //satisfies the contraints on mixed number form
+        return true;
+      } else if (req.dec && sat.dec && (!req.simpDec || sat.simpDec)) {
+        //satisfies the contraints on decimal form
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    function getFeedback (valueOK, formOK) {
+      if (valueOK && formOK) {
+        return "Well done!";
+      } else if (valueOK) {
+        return "Right value, wrong format. Try again!";
+      } else {
+        return "Try again!";
+      }
+    }
+
+    //Stuff to make the format checkboxes interact.
+    document.getElementById("frac").addEventListener('change', function() {
+      [].slice.call(document.getElementsByClassName("hidden")).map(function(x) { x.style.visibility = "hidden"; } );
+      if (!document.getElementById("frac").checked) {
+        document.getElementById("simpFrac").checked = false;
+      }
+    });
+
+    document.getElementById("mixed").addEventListener('change', function() {
+      [].slice.call(document.getElementsByClassName("hidden")).map(function(x) { x.style.visibility = "hidden"; } );
+      if (!document.getElementById("mixed").checked) {
+        document.getElementById("wellMixed").checked = false;
+        document.getElementById("simpMixed").checked = false;
+      }
+    });
+
+    document.getElementById("dec").addEventListener('change', function() {
+      [].slice.call(document.getElementsByClassName("hidden")).map(function(x) { x.style.visibility = "hidden"; } );
+      if (!document.getElementById("dec").checked) {
+        document.getElementById("simpDec").checked = false;
+      }
+    });
+
+    document.getElementById("simpFrac").addEventListener('change', function() {
+      [].slice.call(document.getElementsByClassName("hidden")).map(function(x) { x.style.visibility = "hidden"; } );
+      if (document.getElementById("simpFrac").checked) {
+        document.getElementById("frac").checked = true;
+      }
+    });
+
+    document.getElementById("wellMixed").addEventListener('change', function() {
+      [].slice.call(document.getElementsByClassName("hidden")).map(function(x) { x.style.visibility = "hidden"; } );
+      if (document.getElementById("wellMixed").checked) {
+        document.getElementById("mixed").checked = true;
+      }
+    });
+
+    document.getElementById("simpMixed").addEventListener('change', function() {
+      [].slice.call(document.getElementsByClassName("hidden")).map(function(x) { x.style.visibility = "hidden"; } );
+      if (document.getElementById("simpMixed").checked) {
+        document.getElementById("mixed").checked = true;
+      }
+    });
+
+    document.getElementById("simpDec").addEventListener('change', function() {
+      [].slice.call(document.getElementsByClassName("hidden")).map(function(x) { x.style.visibility = "hidden"; } );
+      if (document.getElementById("simpDec").checked) {
+        document.getElementById("dec").checked = true;
+      }
+    });
+
+    //Stuff to make the feedback, latex, parsed expression etc. disappear when the settings or input are changed.
+    document.getElementById("answerNum").addEventListener('change', function() {
+      [].slice.call(document.getElementsByClassName("hidden")).map(function(x) { x.style.visibility = "hidden"; } );
+    });
+
+    document.getElementById("answerDen").addEventListener('change', function() {
+      [].slice.call(document.getElementsByClassName("hidden")).map(function(x) { x.style.visibility = "hidden"; } );
+    });
+
+    document.getElementById("pm").addEventListener('change', function() {
+      [].slice.call(document.getElementsByClassName("hidden")).map(function(x) { x.style.visibility = "hidden"; } );
+    });
+    </script>
+  </body>
+</html>
